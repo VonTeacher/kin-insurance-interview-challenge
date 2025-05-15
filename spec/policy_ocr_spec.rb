@@ -26,6 +26,70 @@ describe PolicyOcr do
         expect(described_class.scan_number(digits: digits)).to eq "1"
       end
     end
+
+    context "when two" do
+      let(:digits) { OcrDigits.two }
+
+      it "scans a two" do
+        expect(described_class.scan_number(digits: digits)).to eq "2"
+      end
+    end
+
+    context "when three" do
+      let(:digits) { OcrDigits.three }
+
+      it "scans a three" do
+        expect(described_class.scan_number(digits: digits)).to eq "3"
+      end
+    end
+
+    context "when four" do
+      let(:digits) { OcrDigits.four }
+
+      it "scans a four" do
+        expect(described_class.scan_number(digits: digits)).to eq "4"
+      end
+    end
+
+    context "when five" do
+      let(:digits) { OcrDigits.five }
+
+      it "scans a five" do
+        expect(described_class.scan_number(digits: digits)).to eq "5"
+      end
+    end
+
+    context "when six" do
+      let(:digits) { OcrDigits.six }
+
+      it "scans a six" do
+        expect(described_class.scan_number(digits: digits)).to eq "6"
+      end
+    end
+
+    context "when seven" do
+      let(:digits) { OcrDigits.seven }
+
+      it "scans a seven" do
+        expect(described_class.scan_number(digits: digits)).to eq "7"
+      end
+    end
+
+    context "when eight" do
+      let(:digits) { OcrDigits.eight }
+
+      it "scans a eight" do
+        expect(described_class.scan_number(digits: digits)).to eq "8"
+      end
+    end
+
+    context "when nine" do
+      let(:digits) { OcrDigits.nine }
+
+      it "scans a nine" do
+        expect(described_class.scan_number(digits: digits)).to eq "9"
+      end
+    end
   end
 end
 
