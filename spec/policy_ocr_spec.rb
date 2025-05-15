@@ -11,6 +11,14 @@ describe PolicyOcr do
   end
 
   describe ".scan_number" do
+    context "when digit is unrecognizable" do
+      let(:digit) { "   | |   " }
+        
+      it "returns a question mark" do
+        expect(described_class.scan_number(digit: digit)).to eq "?"
+      end
+    end
+    
     context "when single digit" do
       context "when zero" do
         let(:digit) { OcrDigits.zero }
@@ -95,45 +103,77 @@ describe PolicyOcr do
   end
 
   describe ".read_digits" do
-    it "scans 123456789" do
-      digits = "    _  _     _  _  _  _  _ " +
-               "  | _| _||_||_ |_   ||_||_|" +
-               "  ||_  _|  | _||_|  ||_| _|"
-      expect(described_class.read_digits(digits: digits)).to eq "123456789"
+    context "when all characters are valid" do
+      it "scans 123456789" do
+        digits = "    _  _     _  _  _  _  _ " +
+                 "  | _| _||_||_ |_   ||_||_|" +
+                 "  ||_  _|  | _||_|  ||_| _|"
+        expect(described_class.read_digits(digits: digits)).to eq "123456789"
+      end
+  
+      it "scans 000000000" do
+        digits = " _  _  _  _  _  _  _  _  _ " +
+                 "| || || || || || || || || |" +
+                 "|_||_||_||_||_||_||_||_||_|"
+        expect(described_class.read_digits(digits: digits)).to eq "000000000"
+      end
+  
+      it "scans 111111111" do
+        digits = "                           " +
+                 "  |  |  |  |  |  |  |  |  |" +
+                 "  |  |  |  |  |  |  |  |  |"
+        expect(described_class.read_digits(digits: digits)).to eq "111111111"
+      end
     end
-
-    it "scans 000000000" do
-      digits = " _  _  _  _  _  _  _  _  _ " +
-               "| || || || || || || || || |" +
-               "|_||_||_||_||_||_||_||_||_|"
-      expect(described_class.read_digits(digits: digits)).to eq "000000000"
-    end
-
-    it "scans 111111111" do
-      digits = "                           " +
-               "  |  |  |  |  |  |  |  |  |" +
-               "  |  |  |  |  |  |  |  |  |"
-      expect(described_class.read_digits(digits: digits)).to eq "111111111"
+    
+    context "when a character is unrecognizable" do
+      it "scans 11111111?" do
+        digits = "                        __ " +
+                 "  |  |  |  |  |  |  |  |  |" +
+                 "  |  |  |  |  |  |  |  |  |"
+        expect(described_class.read_digits(digits: digits)).to eq "11111111?"
+      end
+      
+      it "scans 123?56789" do
+        digits = "    _  _  _  _  _  _  _  _ " +
+                 "  | _| _||_||_ |_   | _||_|" +
+                 "  ||_  _|  | _||_|  ||_| _|"
+        expect(described_class.read_digits(digits: digits)).to eq "123?567?9"
+      end
     end
   end
 
   describe ".parse_file" do
-    it "creates an array of numbers" do
-      file = File.join(__dir__, "fixtures", "sample.txt")
-
-      expect(described_class.parse_file(file: file)).to eq([
-        "000000000",
-        "111111111",
-        "222222222",
-        "333333333",
-        "444444444",
-        "555555555",
-        "666666666",
-        "777777777",
-        "888888888",
-        "999999999",
-        "123456789"
-      ])
+    context "when include_status is false" do
+      it "creates an array of numbers" do
+        file = File.join(__dir__, "fixtures", "sample.txt")
+  
+        expect(described_class.parse_file(file: file)).to eq([
+          "000000000",
+          "111111111",
+          "222222222",
+          "333333333",
+          "444444444",
+          "555555555",
+          "666666666",
+          "777777777",
+          "888888888",
+          "999999999",
+          "123456789"
+        ])
+      end
+    end
+    
+    context "when include_status is true" do
+      it "outputs findings" do
+        file = File.join(__dir__, "fixtures", "user_story_3.txt")
+        
+        expect(described_class.parse_file(file: file, include_status: true)).to eq([
+          "457508000",
+          "664371495 ERR",
+          "86110??36 ILL"
+        ])
+      end
     end
   end
 
@@ -156,4 +196,6 @@ describe PolicyOcr do
       expect(described_class.validate_policy_number(number: number)).to be false
     end
   end
+  
+  
 end

@@ -1,7 +1,7 @@
 module PolicyOcr
   class << self
     def scan_number(digit:)
-      OcrDigits::MAPPING[digit]
+      OcrDigits::MAPPING.fetch(digit, "?")
     end
 
     def read_digits(digits:)
@@ -26,14 +26,18 @@ module PolicyOcr
       result
     end
 
-    def parse_file(file:)
+    def parse_file(file:, include_status: false)
       output = []
       lines =  File.readlines(file, chomp: true) # chomp to remove newlines
 
       lines.each_slice(4) do |digits|
         data_lines = digits.take(3)
         combined = data_lines.join
-        output << read_digits(digits: combined)
+        
+        number = read_digits(digits: combined)
+        status = append_status(number: number) if include_status
+        
+        output << "#{number} #{status}".strip
       end
 
       output
@@ -48,6 +52,18 @@ module PolicyOcr
       end
 
       (total % 11).zero?
+    end
+    
+    private
+    
+    def append_status(number:)
+      if number.index("?")
+        "ILL"
+      elsif validate_policy_number(number: number)
+        ""
+      else
+        "ERR"
+      end
     end
   end
 end
