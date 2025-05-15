@@ -25,5 +25,18 @@ module PolicyOcr
 
       result
     end
+
+    def parse_file(file:)
+      output = []
+      lines =  File.readlines(file, chomp: true) # chomp to remove newlines
+
+      lines.each_slice(4) do |digits|
+        data_lines = digits.take(3)
+        combined = data_lines.join
+        output << read_digits(digits: combined)
+      end
+
+      output
+    end
   end
 end

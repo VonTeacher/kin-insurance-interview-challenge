@@ -116,4 +116,24 @@ describe PolicyOcr do
       expect(described_class.read_digits(digits: digits)).to eq "111111111"
     end
   end
+
+  describe ".parse_file" do
+    it "creates an array of numbers" do
+      file = File.join(__dir__, "fixtures", "sample.txt")
+
+      expect(described_class.parse_file(file: file)).to eq([
+        "000000000",
+        "111111111",
+        "222222222",
+        "333333333",
+        "444444444",
+        "555555555",
+        "666666666",
+        "777777777",
+        "888888888",
+        "999999999",
+        "123456789"
+      ])
+    end
+  end
 end
