@@ -1,63 +1,77 @@
 module OcrDigits
   class << self
     def zero
-      zero =  " _ "
-      zero += "| |"
-      zero += "|_|"
+      " _ " +
+      "| |" +
+      "|_|"
     end
 
     def one
-      one =  "   "
-      one += "  |"
-      one += "  |"
+      "   " +
+      "  |" +
+      "  |"
     end
 
     def two
-      two =  " _ "
-      two += " _|"
-      two += "|_ "
+      " _ " +
+      " _|" +
+      "|_ "
     end
 
     def three
-      three =  " _ "
-      three += " _|"
-      three += " _|"
+      " _ " +
+      " _|" +
+      " _|"
     end
 
     def four
-      four =  "   "
-      four += "|_|"
-      four += "  |"
+      "   " +
+      "|_|" +
+      "  |"
     end
 
     def five
-      five =  " _ "
-      five += "|_ "
-      five += " _|"
+      " _ " +
+      "|_ " +
+      " _|"
     end
 
     def six
-      six =  " _ "
-      six += "|_ "
-      six += "|_|"
+      " _ " +
+      "|_ " +
+      "|_|"
     end
 
     def seven
-      seven =  " _ "
-      seven += "  |"
-      seven += "  |"
+      " _ " +
+      "  |" +
+      "  |"
     end
 
     def eight
-      eight =  " _ "
-      eight += "|_|"
-      eight += "|_|"
+      " _ " +
+      "|_|" +
+      "|_|"
     end
 
     def nine
-      nine =  " _ "
-      nine += "|_|"
-      nine += " _|"
+      " _ " +
+      "|_|" +
+      " _|"
     end
   end
+
+  MAPPING = {
+    zero => "0",
+    one => "1",
+    two => "2",
+    three => "3",
+    four => "4",
+    five => "5",
+    six => "6",
+    seven => "7",
+    eight => "8",
+    nine => "9"
+  }
+
 end
