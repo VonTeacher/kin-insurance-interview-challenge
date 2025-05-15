@@ -79,7 +79,7 @@ module PolicyOcr
         combined = data_lines.join
 
         number = read_digits(digits: combined)
-        status = append_status(number:) if include_status
+        status = append_status(number: number) if include_status
 
         output << "#{number} #{status}".strip
       end
