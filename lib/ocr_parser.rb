@@ -13,7 +13,7 @@ options = {
 OptionParser.new do |opts|
   opts.banner = "Usage: ocr_parser.rb [options] FILE"
 
-  opts.on("--with-status", "Include status in output and write to file") do
+  opts.on("--include-status", "Include status in output and write to file") do
     options[:include_status] = true
   end
 end.parse!

@@ -1,3 +1,4 @@
+# Provides wrapper methods and mapping hash for OCR character lookup
 module OcrDigits
   class << self
     def zero
