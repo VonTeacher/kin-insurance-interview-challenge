@@ -11,100 +11,109 @@ describe PolicyOcr do
   end
 
   describe ".scan_number" do
-    context "when zero" do
-      let(:digits) { OcrDigits.zero }
+    context "when single digit" do
+      context "when zero" do
+        let(:digit) { OcrDigits.zero }
 
-      it "scans a zero" do
-        expect(described_class.scan_number(digits: digits)).to eq "0"
+        it "scans a zero" do
+          expect(described_class.scan_number(digit: digit)).to eq "0"
+        end
       end
-    end
 
-    context "when one" do
-      let(:digits) { OcrDigits.one }
+      context "when one" do
+        let(:digit) { OcrDigits.one }
 
-      it "scans a one" do
-        expect(described_class.scan_number(digits: digits)).to eq "1"
+        it "scans a one" do
+          expect(described_class.scan_number(digit: digit)).to eq "1"
+        end
       end
-    end
 
-    context "when two" do
-      let(:digits) { OcrDigits.two }
+      context "when two" do
+        let(:digit) { OcrDigits.two }
 
-      it "scans a two" do
-        expect(described_class.scan_number(digits: digits)).to eq "2"
+        it "scans a two" do
+          expect(described_class.scan_number(digit: digit)).to eq "2"
+        end
       end
-    end
 
-    context "when three" do
-      let(:digits) { OcrDigits.three }
+      context "when three" do
+        let(:digit) { OcrDigits.three }
 
-      it "scans a three" do
-        expect(described_class.scan_number(digits: digits)).to eq "3"
+        it "scans a three" do
+          expect(described_class.scan_number(digit: digit)).to eq "3"
+        end
       end
-    end
 
-    context "when four" do
-      let(:digits) { OcrDigits.four }
+      context "when four" do
+        let(:digit) { OcrDigits.four }
 
-      it "scans a four" do
-        expect(described_class.scan_number(digits: digits)).to eq "4"
+        it "scans a four" do
+          expect(described_class.scan_number(digit: digit)).to eq "4"
+        end
       end
-    end
 
-    context "when five" do
-      let(:digits) { OcrDigits.five }
+      context "when five" do
+        let(:digit) { OcrDigits.five }
 
-      it "scans a five" do
-        expect(described_class.scan_number(digits: digits)).to eq "5"
+        it "scans a five" do
+          expect(described_class.scan_number(digit: digit)).to eq "5"
+        end
       end
-    end
 
-    context "when six" do
-      let(:digits) { OcrDigits.six }
+      context "when six" do
+        let(:digit) { OcrDigits.six }
 
-      it "scans a six" do
-        expect(described_class.scan_number(digits: digits)).to eq "6"
+        it "scans a six" do
+          expect(described_class.scan_number(digit: digit)).to eq "6"
+        end
       end
-    end
 
-    context "when seven" do
-      let(:digits) { OcrDigits.seven }
+      context "when seven" do
+        let(:digit) { OcrDigits.seven }
 
-      it "scans a seven" do
-        expect(described_class.scan_number(digits: digits)).to eq "7"
+        it "scans a seven" do
+          expect(described_class.scan_number(digit: digit)).to eq "7"
+        end
       end
-    end
 
-    context "when eight" do
-      let(:digits) { OcrDigits.eight }
+      context "when eight" do
+        let(:digit) { OcrDigits.eight }
 
-      it "scans a eight" do
-        expect(described_class.scan_number(digits: digits)).to eq "8"
+        it "scans a eight" do
+          expect(described_class.scan_number(digit: digit)).to eq "8"
+        end
       end
-    end
 
-    context "when nine" do
-      let(:digits) { OcrDigits.nine }
+      context "when nine" do
+        let(:digit) { OcrDigits.nine }
 
-      it "scans a nine" do
-        expect(described_class.scan_number(digits: digits)).to eq "9"
+        it "scans a nine" do
+          expect(described_class.scan_number(digit: digit)).to eq "9"
+        end
       end
     end
   end
+
+  describe ".read_digits" do
+    it "scans 123456789" do
+      digits = "    _  _     _  _  _  _  _ " +
+               "  | _| _||_||_ |_   ||_||_|" +
+               "  ||_  _|  | _||_|  ||_| _|"
+      expect(described_class.read_digits(digits: digits)).to eq "123456789"
+    end
+
+    it "scans 000000000" do
+      digits = " _  _  _  _  _  _  _  _  _ " +
+               "| || || || || || || || || |" +
+               "|_||_||_||_||_||_||_||_||_|"
+      expect(described_class.read_digits(digits: digits)).to eq "000000000"
+    end
+
+    it "scans 111111111" do
+      digits = "                           " +
+               "  |  |  |  |  |  |  |  |  |" +
+               "  |  |  |  |  |  |  |  |  |"
+      expect(described_class.read_digits(digits: digits)).to eq "111111111"
+    end
+  end
 end
-
-#    _  _     _  _  _  _  _   | _| _||_||_ |_   ||_||_|  ||_  _|  | _||_|  ||_| _|
-# consider as 2d array
-#    _  _     _  _  _  _  _
-#  | _| _||_||_ |_   ||_||_|
-#  ||_  _|  | _||_|  ||_| _|
-# empty line here
-# policy number length: 9 digits
-# top three lines contain number info
-# fourth line is blank
-
-# scan the pipes number
-# return the actual number
-# Input: <see above>
-# Output: "123456789"
-# param: digits (string)
