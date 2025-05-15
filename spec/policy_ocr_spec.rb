@@ -1,4 +1,5 @@
 require_relative '../lib/policy_ocr'
+require_relative '../lib/ocr_digits'
 
 describe PolicyOcr do
   it "loads" do
@@ -11,7 +12,7 @@ describe PolicyOcr do
 
   describe ".scan_number" do
     context "when zero" do
-      let(:digits) { " _ | ||_|" }
+      let(:digits) { OcrDigits.zero }
 
       it "scans a zero" do
         expect(described_class.scan_number(digits: digits)).to eq "0"
@@ -19,7 +20,7 @@ describe PolicyOcr do
     end
 
     context "when one" do
-      let(:digits) { "     |  |" }
+      let(:digits) { OcrDigits.one }
 
       it "scans a one" do
         expect(described_class.scan_number(digits: digits)).to eq "1"

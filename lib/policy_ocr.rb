@@ -1,25 +1,11 @@
 module PolicyOcr
   class << self
     def scan_number(digits:)
-      if digits == zero
+      if digits == OcrDigits.zero
         "0"
-      elsif digits == one
+      elsif digits == OcrDigits.one
         "1"
       end
-    end
-
-    private
-
-    def zero
-      zero =  " _ "
-      zero += "| |"
-      zero += "|_|"
-    end
-
-    def one
-      one =  "   "
-      one += "  |"
-      one += "  |"
     end
   end
 end
