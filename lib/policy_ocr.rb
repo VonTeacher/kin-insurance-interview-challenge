@@ -38,5 +38,16 @@ module PolicyOcr
 
       output
     end
+
+    def validate_policy_number(number:)
+      multiplier = 9
+      total = 0
+
+      number.split("").each_with_index do |digit, index|
+        total += digit.to_i * (multiplier - index)
+      end
+
+      (total % 11).zero?
+    end
   end
 end
