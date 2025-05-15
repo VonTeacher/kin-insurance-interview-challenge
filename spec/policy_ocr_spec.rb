@@ -17,9 +17,19 @@ describe PolicyOcr do
         expect(described_class.scan_number(digits: digits)).to eq "0"
       end
     end
+
+    context "when one" do
+      let(:digits) { "     |  |" }
+
+      it "scans a one" do
+        expect(described_class.scan_number(digits: digits)).to eq "1"
+      end
+    end
   end
 end
 
+#    _  _     _  _  _  _  _   | _| _||_||_ |_   ||_||_|  ||_  _|  | _||_|  ||_| _|
+# consider as 2d array
 #    _  _     _  _  _  _  _
 #  | _| _||_||_ |_   ||_||_|
 #  ||_  _|  | _||_|  ||_| _|

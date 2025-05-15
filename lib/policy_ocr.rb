@@ -3,6 +3,8 @@ module PolicyOcr
     def scan_number(digits:)
       if digits == zero
         "0"
+      elsif digits == one
+        "1"
       end
     end
 
@@ -12,7 +14,12 @@ module PolicyOcr
       zero =  " _ "
       zero += "| |"
       zero += "|_|"
-      zero
+    end
+
+    def one
+      one =  "   "
+      one += "  |"
+      one += "  |"
     end
   end
 end
