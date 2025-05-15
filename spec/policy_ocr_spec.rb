@@ -13,12 +13,22 @@ describe PolicyOcr do
   describe ".scan_number" do
     context "when digit is unrecognizable" do
       let(:digit) { "   | |   " }
-        
+
       it "returns a question mark" do
         expect(described_class.scan_number(digit: digit)).to eq "?"
       end
     end
-    
+
+    context "when a digit is not provided" do
+      let(:digit) { nil }
+
+      it "raises an argument error" do
+        expect {
+          described_class.scan_number(digit:)
+        }.to raise_error(ArgumentError, "You must provide a digit to scan!")
+      end
+    end
+
     context "when single digit" do
       context "when zero" do
         let(:digit) { OcrDigits.zero }
@@ -110,14 +120,14 @@ describe PolicyOcr do
                  "  ||_  _|  | _||_|  ||_| _|"
         expect(described_class.read_digits(digits: digits)).to eq "123456789"
       end
-  
+
       it "scans 000000000" do
         digits = " _  _  _  _  _  _  _  _  _ " +
                  "| || || || || || || || || |" +
                  "|_||_||_||_||_||_||_||_||_|"
         expect(described_class.read_digits(digits: digits)).to eq "000000000"
       end
-  
+
       it "scans 111111111" do
         digits = "                           " +
                  "  |  |  |  |  |  |  |  |  |" +
@@ -125,7 +135,7 @@ describe PolicyOcr do
         expect(described_class.read_digits(digits: digits)).to eq "111111111"
       end
     end
-    
+
     context "when a character is unrecognizable" do
       it "scans 11111111?" do
         digits = "                        __ " +
@@ -133,7 +143,7 @@ describe PolicyOcr do
                  "  |  |  |  |  |  |  |  |  |"
         expect(described_class.read_digits(digits: digits)).to eq "11111111?"
       end
-      
+
       it "scans 123?56789" do
         digits = "    _  _  _  _  _  _  _  _ " +
                  "  | _| _||_||_ |_   | _||_|" +
@@ -147,7 +157,7 @@ describe PolicyOcr do
     context "when include_status is false" do
       it "creates an array of numbers" do
         file = File.join(__dir__, "fixtures", "sample.txt")
-  
+
         expect(described_class.parse_file(file: file)).to eq([
           "000000000",
           "111111111",
@@ -163,11 +173,11 @@ describe PolicyOcr do
         ])
       end
     end
-    
+
     context "when include_status is true" do
       it "outputs findings" do
         file = File.join(__dir__, "fixtures", "user_story_3.txt")
-        
+
         expect(described_class.parse_file(file: file, include_status: true)).to eq([
           "457508000",
           "664371495 ERR",
@@ -175,9 +185,44 @@ describe PolicyOcr do
         ])
       end
     end
+
+    context "when the file does not exist" do
+      it "returns an empty array" do
+        non_file = "nonexistent_file.txt"
+
+        allow(File).to receive(:readlines).with(non_file, chomp: true).and_raise(Errno::ENOENT)
+
+
+        expect(described_class.parse_file(file: non_file)).to eq([])
+      end
+    end
   end
 
   describe ".validate_policy_number" do
+    context "when number is invalid" do
+      it "returns false when nil" do
+        expect(described_class.validate_policy_number(number: nil)).to be false
+      end
+
+      it "returns false when empty" do
+        expect(described_class.validate_policy_number(number: "")).to be false
+      end
+
+      it "returns false when too short" do
+        expect(described_class.validate_policy_number(number: "12345678")).to be false
+      end
+
+      it "returns false when too long" do
+        expect(described_class.validate_policy_number(number: "1234567890")).to be false
+      end
+
+      it "returns false for an invalid policy number" do
+        number = "345882866"
+
+        expect(described_class.validate_policy_number(number: number)).to be false
+      end
+    end
+
     it "returns true for a valid policy number" do
       number = "345882865"
 
@@ -189,13 +234,5 @@ describe PolicyOcr do
 
       expect(described_class.validate_policy_number(number: number)).to be true
     end
-
-    it "returns false for an invalid policy number" do
-      number = "345882866"
-
-      expect(described_class.validate_policy_number(number: number)).to be false
-    end
   end
-  
-  
 end
