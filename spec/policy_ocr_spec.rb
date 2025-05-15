@@ -8,4 +8,28 @@ describe PolicyOcr do
   it 'loads the sample.txt' do
     expect(fixture('sample').lines.count).to eq(44)
   end
+
+  describe ".scan_number" do
+    context "when zero" do
+      let(:digits) { " _ | ||_|" }
+
+      it "scans a zero" do
+        expect(described_class.scan_number(digits: digits)).to eq "0"
+      end
+    end
+  end
 end
+
+#    _  _     _  _  _  _  _
+#  | _| _||_||_ |_   ||_||_|
+#  ||_  _|  | _||_|  ||_| _|
+# empty line here
+# policy number length: 9 digits
+# top three lines contain number info
+# fourth line is blank
+
+# scan the pipes number
+# return the actual number
+# Input: <see above>
+# Output: "123456789"
+# param: digits (string)
