@@ -136,4 +136,24 @@ describe PolicyOcr do
       ])
     end
   end
+
+  describe ".validate_policy_number" do
+    it "returns true for a valid policy number" do
+      number = "345882865"
+
+      expect(described_class.validate_policy_number(number: number)).to be true
+    end
+
+    it "returns true for a valid policy number" do
+      number = "345885864"
+
+      expect(described_class.validate_policy_number(number: number)).to be true
+    end
+
+    it "returns false for an invalid policy number" do
+      number = "345882866"
+
+      expect(described_class.validate_policy_number(number: number)).to be false
+    end
+  end
 end
